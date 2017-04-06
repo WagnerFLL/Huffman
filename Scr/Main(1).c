@@ -17,12 +17,12 @@ int main(){
             //compress();
             break;
         }
-        else if(option == 1){
+        else if(option == 2){
             //descompress();
             break;
         }
         else{
-            printf("Opcao inv·lida! Tente Novamente.\n");
+            printf("Opcao inv√°lida! Tente Novamente.\n");
         }
         system("cls");
     }
