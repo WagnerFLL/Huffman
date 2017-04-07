@@ -35,18 +35,18 @@ Tree* creat_node(unsigned char character, int frequencia);
 Tree *bilding_Tree(deck *deck);
 
 /*
- *Ela recebe um ponteiro pra inteiro, correspondendo ao array de frequÍncia e retorna a arvore montada
+ *Ela recebe um ponteiro pra inteiro, correspondendo ao array de frequ√™ncia e retorna a arvore montada
 */
 Tree* Biulding_huffman_tree(int *array);
 
 /*
- * Recebe o ponteiro para o arquivo original, e o ponteiro pra um array(256 posiÁıes) com 0's.
- * Sem retorno, as modificaÁıes s„o feitas diretamente no array.
+ * Recebe o ponteiro para o arquivo original, e o ponteiro pra um array(256 posi√ß√µes) com 0's.
+ * Sem retorno, as modifica√ß√µes s√£o feitas diretamente no array.
  */
 void ler(FILE* arquivo, int* array);
 
 /*
-* Chama todas as funÁıes necess·rias para compress„o dos dados.
+* Chama todas as fun√ß√µes necess√°rias para compress√£o dos dados.
  */
 void compress();
 
@@ -149,15 +149,12 @@ void ler(FILE* arquivo, int* array){
 	}
 
 	return;
-
 }
 
 //IGNOREM ESSA!!!
 void demonstration_func(Tree* bt){
 	if(bt == NULL)return;
 	printf("%c | %d\n",bt->chracter,bt->repear);
-	if(bt->left != NULL)printf("Esquerda ok!\n");
-	if(bt->right == NULL)printf("Eror direita!");
 	demonstration_func(bt->left);
 	demonstration_func(bt->right);
 }
@@ -167,13 +164,15 @@ void compress(){
 	char name[200];
 	int frequency[256] = {0};
 
+    FILE* arquivo;
+
 	while(1){
 		printf("-------------------------\n");
 		printf("Digite o nome do arquivo:\n");
 		printf("-------------------------\n");
 		printf("> ");
 		scanf("%s",name);
-		FILE* arquivo = fopen(name,"rb");
+		arquivo = fopen(name,"rb");
 		if(arquivo == NULL){
 			printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
 			getchar();
@@ -183,7 +182,7 @@ void compress(){
 		}
 	}
 
-	void ler(arquivo, frequency);
+	ler(arquivo, frequency);
 
 	Tree* bt = Biulding_huffman_tree(frequency);
 
@@ -214,7 +213,7 @@ int main(){
             break;
         }
         else{
-            printf("Opcao inv·lida! Tente Novamente.\n");
+            printf("Opcao inv√°lida! Tente Novamente.\n");
         }
         system("cls");
     }
