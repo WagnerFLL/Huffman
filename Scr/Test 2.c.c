@@ -70,7 +70,7 @@ Tree* Biulding_huffman_tree(int *array){
 
 struct _tree{
     int repear;
-    unsigned char chracter;
+    unsigned char c;
     Tree *next;
     Tree *left;
     Tree *right;
@@ -82,7 +82,7 @@ struct _deck{
 
 Tree* creat_node(unsigned char character, int frequencia){
     Tree *new_node = (Tree*) malloc(sizeof(Tree));
-    new_node->chracter = character;
+    new_node->c = character;
     new_node->repear = frequencia;
     new_node->next = NULL;
     new_node->left = NULL;
@@ -151,14 +151,27 @@ void ler(FILE* arquivo, int* array){
 	return;
 }
 
-//IGNOREM ESSA!!!
-void demonstration_func(Tree* bt){
-	if(bt == NULL)return;
-	printf("%c | %d\n",bt->chracter,bt->repear);
-	demonstration_func(bt->left);
-	demonstration_func(bt->right);
-}
+/*IGNOREM ESSA!!!
+void demonstration_func(Tree* bt, char *k, int p, int *A){
+	if(bt->left == NULL && bt->right == NULL){
+        k[p] = '\0';
+        printf("%d = %s\n",A[bt->c], k);
+        return;
+	}
+	if(bt->left != NULL)
+    {
+        k[p] = '0';
+        demonstration_func(bt->left, k, p+1,A);
+    }
+    if(bt->right != NULL)
+    {
+        k[p] = '1';
+        demonstration_func(bt->right, k, p+1,A);
+    }
 
+
+}
+*/
 void compress(){
 
 	char name[200];
@@ -185,8 +198,8 @@ void compress(){
 	ler(arquivo, frequency);
 
 	Tree* bt = Biulding_huffman_tree(frequency);
-
-	demonstration_func(bt);
+    char kkkk[5000];
+	//demonstration_func(bt, kkkk, 0,frequency);
 
 }
 
@@ -218,4 +231,6 @@ int main(){
         system("cls");
     }
 
+    getchar();
+    getchar();
 }
