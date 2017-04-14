@@ -212,45 +212,36 @@ void criar_tabela(unsigned char tabela[256][150], Tree* bt, unsigned char *k, in
 
 void compress(){
 
-	char name[200],aux[150];
-	int frequency[256] = {0};
+    char name[200],aux[150];
+    int frequency[256] = {0};
 
     FILE* arquivo;
     FILE* novo_arquivo;
 
-	while(1){
-		printf("-------------------------\n");
-		printf("Digite o nome do arquivo:\n");
-		printf("-------------------------\n");
-		printf("> ");
-		scanf("%s",name);
-		arquivo = fopen(name,"rb");
-		if(arquivo == NULL){
-			printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
-			getchar();
-			system("cls");
-		}else{
-			break;
-		}
+    while(1){
+	printf("-------------------------\n");
+	printf("Digite o nome do arquivo:\n");
+	printf("-------------------------\n");
+	printf("> ");
+	scanf("%s",name);
+	arquivo = fopen(name,"rb");
+	if(arquivo == NULL){
+		printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
+		getchar();
+		system("cls");
+	}else{
+		break;
 	}
+    }
 
-	ler(arquivo, frequency);
-	fseek(arquivo,0,SEEK_SET);
+    ler(arquivo, frequency);
+    fseek(arquivo,0,SEEK_SET);
     printf("Lido!\n");
 
-	Tree* bt = Biulding_huffman_tree(frequency);
-    printf("Arvore feita!\n");
-
+    Tree* bt = Biulding_huffman_tree(frequency);
+    
     unsigned char tabela[256][150];
     criar_tabela(tabela,bt,aux,0);
-    /*
-    int a;
-    for(a = 0; a < 256; a++)
-    {
-        if(tabela[a][1] == '1' || tabela[a][1] == '0')
-            printf("%d %s\n", a, tabela[a]);
-    }
-    */
     printf("Tabela criada!\n");
 
     novo_arquivo = fopen("gerado","wb");
