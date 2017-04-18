@@ -10,6 +10,7 @@
 
 typedef struct _tree Tree;
 typedef struct _deck deck;
+typedef unsigned char BYTE;
 
 deck* creat_deck();
 
@@ -67,7 +68,7 @@ void writing_pre_order(Tree *huffman, unsigned char *string, int *index);
 
 /*
     RECEBE UM CARACTER, UM INTEIRO E UM CARACTER
-    SETA COM SHIFT BIT EM i VEZES O BYTE DE mask E COMPARA COM C UTILIZANDO | (OU) 
+    SETA COM SHIFT BIT EM i VEZES O BYTE DE mask E COMPARA COM C UTILIZANDO | (OU)
     RETORNA UM VALOR INTEIRO CORRESPONDENTE AO NOVO BYTE SETADO
 */
 int set_bit (unsigned char c, unsigned char mask, int i);
@@ -176,47 +177,35 @@ Tree *bilding_Tree(deck *deck){
 
 void ler(FILE* arquivo, int* array){
 
-    unsigned char capture;
+    BYTE capture;
 
     while((fscanf(arquivo,"%c",&capture)) != EOF){
         ++array[capture];
     }
-    /*
-    int a;
-    for(a = 0; a < 256; a++)
-    {
-        if(array[a] != 0)
-            printf("%d %d\n", a, array[a]);
-    }
-    */
 
     return;
 }
 
-unsigned char add_bit(unsigned char c_saida, short int pos){
+BYTE add_bit(BYTE c_saida, short int pos){
     return (c_saida | (1<<(7-pos)));
 }
 
-int write(unsigned char tabela[256][150], FILE* arquivo, FILE* saida){
+void write(BYTE tabela[256][150], FILE* arquivo, FILE* saida){
 
-    unsigned char aux,c = 0,cond = 1;
+    BYTE aux,c = 0,cond = 1;
     short int tam = 0,pos = 0;
 
-    fprintf(arquivo, "%c%c", c, c);
     while((fscanf(arquivo,"%c",&aux)) != EOF){
         printf(".");
         pos = 0;
 
         while(tabela[aux][pos] != '\0'){
-
             if(tam == 8){
                 fprintf(saida,"%c",c);
                 tam = 0;
                 c = 0;
             }
-
             if(tabela[aux][pos] == '1')c = add_bit(c,tam);
-
             ++tam;
             ++pos;
         }
@@ -224,10 +213,22 @@ int write(unsigned char tabela[256][150], FILE* arquivo, FILE* saida){
     printf("\n");
     int lixo = 8 - tam;
     fprintf(saida,"%c",c);
-    return lixo;
+
+    //SETANDO O PRIMEIRO BYTE (BITS DO LIXO)
+    fseek(saida,0,SEEK_SET);
+    fscanf(saida,"%c",&aux);
+    for(pos=5; pos<8; pos++)
+    {
+        c = set_bit(c, pos, lixo%2);
+        lixo = lixo/2;
+    }
+    fseek(saida,0,SEEK_SET);
+    fprintf(saida, "%c", c);
+
+    return;
 }
 
-void criar_tabela(unsigned char tabela[256][150], Tree* bt, unsigned char *k, int p){
+void criar_tabela(BYTE tabela[256][150], Tree* bt, BYTE *k, int p){
     if(bt->left == NULL && bt->right == NULL){
         k[p] = '\0';
         strcpy(tabela[bt->c],k);
@@ -248,7 +249,7 @@ void criar_tabela(unsigned char tabela[256][150], Tree* bt, unsigned char *k, in
 void creating_huffman_string(Tree *huffman, FILE *header)
 {
     int size = number_of_nodes(huffman, 0), *index, aux=0;
-    unsigned char *string = (unsigned char *)malloc(sizeof(unsigned char)*size);
+    BYTE *string = (BYTE *)malloc(sizeof(BYTE)*size);
     index = &aux;
     writing_pre_order(huffman, string, index);
     putting_huffman_tree_on_header(header, string, size);
@@ -267,7 +268,7 @@ int number_of_nodes(Tree *huffman, int n)
     return n;
 }
 
-void writing_pre_order(Tree *huffman, unsigned char *string, int *index)
+void writing_pre_order(Tree *huffman, BYTE *string, int *index)
 {
     if(huffman!=NULL)
     {
@@ -283,15 +284,15 @@ void writing_pre_order(Tree *huffman, unsigned char *string, int *index)
     }
 }
 
-int set_bit (unsigned char c, unsigned char mask, int i);
+int set_bit (BYTE c, BYTE mask, int i){
     mask = mask << i;
     return mask | c;
 }
 
-void putting_huffman_tree_on_header (FILE *header, unsigned char *huffman, int huffman_size)
+void putting_huffman_tree_on_header (FILE *header, BYTE *huffman, int huffman_size)
 {
     int i;
-    unsigned char b1 = 0, b2 = 0; //b1->byte1, b2->byte2
+    BYTE b1 = 0, b2 = 0; //b1->byte1, b2->byte2
     //SETANDO O SEGUNDO BYTE
     for(i=0; i<8; i++)
     {
@@ -304,14 +305,7 @@ void putting_huffman_tree_on_header (FILE *header, unsigned char *huffman, int h
         b1 = set_bit(b1, huffman_size%2, i);
         huffman_size = huffman_size/2;
     }
-/*
-    //SETANDO O PRIMEIRO BYTE (BITS DO LIXO)
-    for(i=5; i<8; i++)
-    {
-        b1 = set_bit(b1, i, lixo%2);
-        lixo = lixo/2;
-    }
-*/
+
     fprintf(header,"%c%c%s", b1, b2, huffman);
 }
 
@@ -324,6 +318,7 @@ void compress(){
     FILE* novo_arquivo;
 
     while(1){
+        system("cls");
         printf("-------------------------\n");
         printf("Digite o nome do arquivo:\n");
         printf("-------------------------\n");
@@ -332,7 +327,7 @@ void compress(){
         arquivo = fopen(name,"rb");
         if(arquivo == NULL){
             printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
-            getchar();
+            system("pause");
             system("cls");
         }else{
             break;
@@ -346,25 +341,18 @@ void compress(){
     Tree* bt = Biulding_huffman_tree(frequency);
     printf("Arvore feita!\n");
 
-    unsigned char tabela[256][150];
+    BYTE tabela[256][150];
     criar_tabela(tabela,bt,aux,0);
-    /*
-    int a;
-    for(a = 0; a < 256; a++)
-    {
-        if(tabela[a][1] == '1' || tabela[a][1] == '0')
-            printf("%d %s\n", a, tabela[a]);
-    }
-    */
+
     printf("Tabela criada!\n");
 
     novo_arquivo = fopen("gerado","wb");
 
-    int lixo = write(tabela,arquivo,novo_arquivo);
-    //printf("%d\n", lixo);
-    printf("Arquivo escrito!");
-
     creating_huffman_string(bt, novo_arquivo);
+
+    write(tabela,arquivo,novo_arquivo);
+
+    printf("Arquivo escrito!");
 
     fclose(arquivo);
     fclose(novo_arquivo);
@@ -386,14 +374,16 @@ int main(){
 
         if(option == 1){
             compress();
+            system("pause");
             break;
         }
         else if(option == 2){
             //descompress();
+            system("pause");
             break;
         }
         else{
-            printf("Opcao invÃ¡lida! Tente Novamente.\n");
+            printf("Opcao invalida! Tente Novamente.\n");
         }
         system("cls");
     }
