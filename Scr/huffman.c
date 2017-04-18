@@ -45,6 +45,41 @@ Tree* Biulding_huffman_tree(int *array);
 void ler(FILE* arquivo, int* array);
 
 /*
+    RECEBE UM PONTEIRO PARA Tree E UM PARA FILE
+    GERA UMA STRING CONTENDO A ARVORE IMPRESSA EM PRE-ORDEM
+    RETORNA UMA STRING CONTENDO A ARVORE EM PRE-ORDEM
+*/
+void creating_huffman_string(Tree *huffman, FILE *header);
+
+/*
+    RECEBE UM PONTEIRO PARA ARVORE DO TIPO Tree E UM INTEIRO DE PARTIDA
+    CONTA A QUANTIDADE DE NÓS DA ARVORE ATRAVÉ DA PRE-ORDEM
+    RETORNA UM INTEIRO CONTENDO A QUANTIDADE DE NÓS (CONSIDERANDO OS CARACTERES DE ESCAPE)
+*/
+int number_of_nodes(Tree *huffman, int n);
+
+/*
+    RECEBE 3 PONTEIROS, UM PARA Tree, UM PARA CHAR E UM PARA INTEIRO
+    ESSA FUNÇÃO PREENCHE A STRING USANDO A PRE-ORDEM DA ARVORE UTILIZANDO O PONTEIRO DE INTEIRO PARA AUXILIAR NO INDICE
+    NÃO POSSUI RETORNO
+*/
+void writing_pre_order(Tree *huffman, unsigned char *string, int *index);
+
+/*
+    RECEBE UM CARACTER, UM INTEIRO E UM CARACTER
+    SETA COM SHIFT BIT EM i VEZES O BYTE DE mask E COMPARA COM C UTILIZANDO | (OU) 
+    RETORNA UM VALOR INTEIRO CORRESPONDENTE AO NOVO BYTE SETADO
+*/
+int set_bit (unsigned char c, unsigned char mask, int i);
+
+/*
+    RECEBE UM PONTEIRO PARA FILE, UMA STRING CONTENDO O HUFFMAN EM PRE-ORDEM E UM INTEIRO CONTENDO O TAMANHO DA STRING
+    SETA BITA A BIT OS DOIS PRIMEIROS BYTES DO HEADER (SEM O LIXO) E COLOCA EM UM ARQUIVO txt JUNTO COM A ARVORE
+    NÃO POSSUI RETORNO
+*/
+void putting_huffman_tree_on_header (FILE *header, unsigned char *huffman, int huffman_size);
+
+/*
 * Chama todas as funÃ§Ãµes necessÃ¡rias para compressÃ£o dos dados.
  */
 void compress();
@@ -122,7 +157,7 @@ Tree* dequeue(deck *deck){
 
 Tree *bilding_Tree(deck *deck){
 
-	Tree *aux;
+    Tree *aux;
 
     while(1){
         aux = creat_node('*', 0);
@@ -141,21 +176,21 @@ Tree *bilding_Tree(deck *deck){
 
 void ler(FILE* arquivo, int* array){
 
-	unsigned char capture;
+    unsigned char capture;
 
-	while((fscanf(arquivo,"%c",&capture)) != EOF){
-		++array[capture];
-	}
+    while((fscanf(arquivo,"%c",&capture)) != EOF){
+        ++array[capture];
+    }
     /*
-	int a;
-	for(a = 0; a < 256; a++)
+    int a;
+    for(a = 0; a < 256; a++)
     {
         if(array[a] != 0)
             printf("%d %d\n", a, array[a]);
     }
     */
 
-	return;
+    return;
 }
 
 unsigned char add_bit(unsigned char c_saida, short int pos){
@@ -167,7 +202,7 @@ int write(unsigned char tabela[256][150], FILE* arquivo, FILE* saida){
     unsigned char aux,c = 0,cond = 1;
     short int tam = 0,pos = 0;
 
-
+    fprintf(arquivo, "%c%c", c, c);
     while((fscanf(arquivo,"%c",&aux)) != EOF){
         printf(".");
         pos = 0;
@@ -193,12 +228,12 @@ int write(unsigned char tabela[256][150], FILE* arquivo, FILE* saida){
 }
 
 void criar_tabela(unsigned char tabela[256][150], Tree* bt, unsigned char *k, int p){
-	if(bt->left == NULL && bt->right == NULL){
+    if(bt->left == NULL && bt->right == NULL){
         k[p] = '\0';
         strcpy(tabela[bt->c],k);
         return;
-	}
-	if(bt->left != NULL)
+    }
+    if(bt->left != NULL)
     {
         k[p] = '0';
         criar_tabela(tabela,bt->left, k, p+1);
@@ -210,6 +245,76 @@ void criar_tabela(unsigned char tabela[256][150], Tree* bt, unsigned char *k, in
     }
 }
 
+void creating_huffman_string(Tree *huffman, FILE *header)
+{
+    int size = number_of_nodes(huffman, 0), *index, aux=0;
+    unsigned char *string = (unsigned char *)malloc(sizeof(unsigned char)*size);
+    index = &aux;
+    writing_pre_order(huffman, string, index);
+    putting_huffman_tree_on_header(header, string, size);
+}
+
+//FUNÇÕES AUXILIARES DE creating_huffman_string
+int number_of_nodes(Tree *huffman, int n)
+{
+    if(huffman!=NULL)
+    {
+        if((huffman->c == '*' || huffman->c == '\\') && huffman->left == NULL && huffman->right == NULL)
+            n++;
+        n = number_of_nodes(huffman->left, n+1);
+        n = number_of_nodes(huffman->right, n);
+    }
+    return n;
+}
+
+void writing_pre_order(Tree *huffman, unsigned char *string, int *index)
+{
+    if(huffman!=NULL)
+    {
+        if((huffman->c == '*' || huffman->c == '\\') && huffman->left == NULL && huffman->right == NULL)
+        {
+            string[*index] = '\\';
+            *index = (*index)+1;
+        }
+        string[*index] = huffman->c;
+        *index = (*index)+1;
+        writing_pre_order(huffman->left, string, index);
+        writing_pre_order(huffman->right, string, index);
+    }
+}
+
+int set_bit (unsigned char c, unsigned char mask, int i);
+    mask = mask << i;
+    return mask | c;
+}
+
+void putting_huffman_tree_on_header (FILE *header, unsigned char *huffman, int huffman_size)
+{
+    int i;
+    unsigned char b1 = 0, b2 = 0; //b1->byte1, b2->byte2
+    //SETANDO O SEGUNDO BYTE
+    for(i=0; i<8; i++)
+    {
+        b2 = set_bit(b2, huffman_size%2, i);
+        huffman_size = huffman_size/2;
+    }
+    //SETANDO O PRIMEIRO BYTE (SEM O LIXO)
+    for(i=0; i<5; i++)
+    {
+        b1 = set_bit(b1, huffman_size%2, i);
+        huffman_size = huffman_size/2;
+    }
+/*
+    //SETANDO O PRIMEIRO BYTE (BITS DO LIXO)
+    for(i=5; i<8; i++)
+    {
+        b1 = set_bit(b1, i, lixo%2);
+        lixo = lixo/2;
+    }
+*/
+    fprintf(header,"%c%c%s", b1, b2, huffman);
+}
+
 void compress(){
 
     char name[200],aux[150];
@@ -219,19 +324,19 @@ void compress(){
     FILE* novo_arquivo;
 
     while(1){
-	printf("-------------------------\n");
-	printf("Digite o nome do arquivo:\n");
-	printf("-------------------------\n");
-	printf("> ");
-	scanf("%s",name);
-	arquivo = fopen(name,"rb");
-	if(arquivo == NULL){
-		printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
-		getchar();
-		system("cls");
-	}else{
-		break;
-	}
+        printf("-------------------------\n");
+        printf("Digite o nome do arquivo:\n");
+        printf("-------------------------\n");
+        printf("> ");
+        scanf("%s",name);
+        arquivo = fopen(name,"rb");
+        if(arquivo == NULL){
+            printf("O nome do arquivo ou caminho\nesta incorreto!\n Tente novamente...");
+            getchar();
+            system("cls");
+        }else{
+            break;
+        }
     }
 
     ler(arquivo, frequency);
@@ -239,9 +344,18 @@ void compress(){
     printf("Lido!\n");
 
     Tree* bt = Biulding_huffman_tree(frequency);
-    
+    printf("Arvore feita!\n");
+
     unsigned char tabela[256][150];
     criar_tabela(tabela,bt,aux,0);
+    /*
+    int a;
+    for(a = 0; a < 256; a++)
+    {
+        if(tabela[a][1] == '1' || tabela[a][1] == '0')
+            printf("%d %s\n", a, tabela[a]);
+    }
+    */
     printf("Tabela criada!\n");
 
     novo_arquivo = fopen("gerado","wb");
@@ -249,6 +363,8 @@ void compress(){
     int lixo = write(tabela,arquivo,novo_arquivo);
     //printf("%d\n", lixo);
     printf("Arquivo escrito!");
+
+    creating_huffman_string(bt, novo_arquivo);
 
     fclose(arquivo);
     fclose(novo_arquivo);
