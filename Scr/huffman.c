@@ -1,4 +1,4 @@
- /*
+  /*
  * compress.c
  *
  *  Created on: 6 de abr de 2017
@@ -215,13 +215,13 @@ void write(BYTE tabela[256][150], FILE* arquivo, FILE* saida){
     fprintf(saida,"%c",c);
 
     //SETANDO O PRIMEIRO BYTE (BITS DO LIXO)
+    c = 0 ;
+
     fseek(saida,0,SEEK_SET);
-    fscanf(saida,"%c",&aux);
-    for(pos=5; pos<8; pos++)
-    {
-        c = set_bit(c, pos, lixo%2);
-        lixo = lixo/2;
-    }
+    fscanf(saida,"%c",&c);
+
+    c = c|(lixo<<5);
+
     fseek(saida,0,SEEK_SET);
     fprintf(saida, "%c", c);
 
@@ -252,6 +252,7 @@ void creating_huffman_string(Tree *huffman, FILE *header)
     BYTE *string = (BYTE *)malloc(sizeof(BYTE)*size);
     index = &aux;
     writing_pre_order(huffman, string, index);
+    string[aux] = '\0';
     putting_huffman_tree_on_header(header, string, size);
 }
 
@@ -292,7 +293,7 @@ int set_bit (BYTE c, BYTE mask, int i){
 void putting_huffman_tree_on_header (FILE *header, BYTE *huffman, int huffman_size)
 {
     int i;
-    BYTE b1 = 0, b2 = 0; //b1->byte1, b2->byte2
+    BYTE b1 = 0, b2 = 0; //b1: byte1, b2: byte2
     //SETANDO O SEGUNDO BYTE
     for(i=0; i<8; i++)
     {
@@ -346,7 +347,7 @@ void compress(){
 
     printf("Tabela criada!\n");
 
-    novo_arquivo = fopen("gerado","wb");
+    novo_arquivo = fopen("gerado.huff","wb");
 
     creating_huffman_string(bt, novo_arquivo);
 
@@ -391,3 +392,4 @@ int main(){
     getchar();
     getchar();
 }
+
