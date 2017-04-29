@@ -1,3 +1,4 @@
+#include "queue.h"
 #include "tree.h"
 
 Tree* creating_nodes (BYTE character){
@@ -36,7 +37,7 @@ Tree* rebuild_huffman_tree (FILE *arquivo){
 //####################################################################33
 
 static Tree* creat_node(BYTE character, int frequencia){
-    
+
     Tree *new_node = (Tree*) malloc(sizeof(Tree));
     new_node->character= character;
     new_node->frequency = frequencia;
@@ -82,7 +83,7 @@ Tree* build_huffman_tree(int *array){
 }
 
 void write_Tree(Tree *root, int *size, FILE *header){
-   
+
     if(root->left == NULL && root->right == NULL){
 
         if(root->character== '\\' || root->character== '*'){
@@ -91,7 +92,7 @@ void write_Tree(Tree *root, int *size, FILE *header){
             (*size)++;
             fprintf(header, "%c", aux);
         }
-        
+
         (*size)++;
         fprintf(header, "%c", root->character);
 

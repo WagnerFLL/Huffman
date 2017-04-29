@@ -1,5 +1,4 @@
 #include "compress.h"
-#include "tree.h"
 
 void frequency_count(FILE* arquivo, int* array){
 
@@ -51,6 +50,7 @@ void write_compress(BYTE tabela[][150], FILE* arquivo, FILE* saida, int tree_siz
 }
 
 void creat_table(BYTE tabela[][150], Tree* bt, BYTE *string, int position){
+    
     if(bt->left == NULL && bt->right == NULL){
         string[position] = '\0';
         strncpy(tabela[bt->character],string,position+1);

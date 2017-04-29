@@ -1,11 +1,12 @@
 #ifndef DECOMPRESS_H
 #define DECOMPRESS_H
 
-#include "decompress.c"
+#include "tree.h"
+#include <stdio.h>
 
 
 /*
- * Funções internas: 
+ * Funções internas:
  */
 
 /*

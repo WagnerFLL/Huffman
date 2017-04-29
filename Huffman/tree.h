@@ -2,11 +2,11 @@
 #define TREE_H
 
 #include <stdio.h>
-#include "queue.h"
 
 typedef unsigned char BYTE;
 
 typedef struct _tree Tree;
+typedef struct priority_q priority_queue;
 
 struct _tree{
     int frequency;

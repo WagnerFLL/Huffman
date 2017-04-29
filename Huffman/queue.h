@@ -1,8 +1,8 @@
 #ifndef QUEUE_H
 #define  QUEUE_H
 
-#include <stdio.h>
 #include "tree.h"
+#include <stdio.h>
 
 typedef struct priority_q priority_queue;
 

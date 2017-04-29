@@ -28,13 +28,14 @@ int creating_huffman_string(Tree *huffman, FILE *header);
 
 /*
  * Função: creat_table
- * FALTA COMENTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Recebe uma matriz(tipo byte) e o ponteiro pra arvore de huffman e para uma string vazia. Variável position inicia como 0.
+ * Retorna a tabela(matriz de byte) com os caminhos de cada folha(character) na árvore.
  */
 void creat_table(BYTE tabela[][150], Tree* bt, BYTE *string, int position);
 
 /*
  * Função: creating_huffman_string
- * FALTA COMENTAR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * Recebe um ponteiro para a árvore de huffman e inicia o processo que gera a partir dela uma string. Recebe um ponteiro para o arquivo de saída e escreve dois bytes vazios no início.
  */
 int creating_huffman_string(Tree *huffman, FILE *header);
 
