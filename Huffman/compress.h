@@ -1,9 +1,8 @@
 #ifndef COMPRESS_H
 #define COMPRESS_H
 
-#include <stdio.h>
-#include <string.h>
 #include "tree.h"
+#include "queue.h"
 
 /*
  * Função: frequency_count

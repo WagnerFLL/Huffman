@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <string.g>
 #include "decompress.h"
 
 static void write_decompress(Tree *bt, FILE *entrada, FILE *saida, int lixo){

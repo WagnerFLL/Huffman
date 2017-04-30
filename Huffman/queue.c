@@ -1,7 +1,7 @@
 #include "queue.h"
 
 Tree* dequeue(priority_queue *pq){
-    
+
     if(pq->head == NULL)
         return NULL;
     Tree *aux = pq->head;

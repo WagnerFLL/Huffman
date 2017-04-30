@@ -2,7 +2,6 @@
 #define  QUEUE_H
 
 #include "tree.h"
-#include <stdio.h>
 
 typedef struct priority_q priority_queue;
 

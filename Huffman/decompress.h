@@ -2,8 +2,7 @@
 #define DECOMPRESS_H
 
 #include "tree.h"
-#include <stdio.h>
-
+#include "queue.h"
 
 /*
  * Funções internas:

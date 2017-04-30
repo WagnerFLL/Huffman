@@ -1,4 +1,3 @@
-#include "queue.h"
 #include "tree.h"
 
 Tree* creating_nodes (BYTE character){
