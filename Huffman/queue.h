@@ -10,19 +10,16 @@ struct priority_q{
 };
 
 /*
- * Função: creat_priority_queue
  * Cria uma lista de prioridades vazia.
  */
 priority_queue* creat_priority_queue();
 
 /*
- * Função: enqueue
  * Recebe a letra a frequencia e renfileira em prioridade minima.
  */
 void enqueue(Tree *node, priority_queue *pq);
 
 /*
- * Função: dequeue
  * Recebe uma fila e retorna o prmeiro no, o menos frequente.
  */
 Tree* dequeue(priority_queue *pq);

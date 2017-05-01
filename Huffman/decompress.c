@@ -1,6 +1,6 @@
 #include "decompress.h"
 
-static void write_decompress(Tree *bt, FILE *entrada, FILE *saida, int lixo){
+void write_decompress(Tree *bt, FILE *entrada, FILE *saida, int lixo){
     Tree *aux = bt;
     BYTE character, aux1;
     int i;
@@ -39,7 +39,7 @@ static void write_decompress(Tree *bt, FILE *entrada, FILE *saida, int lixo){
     return ;
 }
 
-static int verification(char *nome){
+int verification(char *nome){
     int condition = 0,i,j,size = strlen(nome);
     char *huff;
     huff = ".huff";

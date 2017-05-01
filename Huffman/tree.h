@@ -19,29 +19,15 @@ struct _tree{
 };
 
 /*
- * FALTA COMENTAR!!!!!!!!!!!!!!!!!
+ * Recebe um caractere e retorna um no só com essa informação.
  */
 Tree* creating_nodes (BYTE character);
 
-/*
- * FALTA COMENTAR!!!!!!!!!!!!!!!!!
- */
-Tree* rebuild_huffman_tree (FILE *arquivo);
 
 /*
- * Recebe um Char e a sua frequencia e retorna um no desse char
+ * Recebe um Char e a sua frequencia e retorna um no com esse char.
  */
-static Tree* creat_node(BYTE character, int frequencia);
-
-/*
- * Recebe uma fila e retorna a arvore montada
- */
-static Tree *build_Tree(priority_queue *pq);
-
-/*
- *Ela recebe um ponteiro pra inteiro, correspondendo ao array de frequÃªncia e retorna a arvore montada
- */
-Tree* build_huffman_tree(int *array);
+Tree* creat_node(BYTE character, int frequencia);
 
 /*
  * FALTA COMENTAR!!!!!!!!!!!!!!!!!!!

@@ -68,18 +68,6 @@ void creat_table(BYTE tabela[][150], Tree* bt, BYTE *string, int position){
     }
 }
 
-int creating_huffman_string(Tree *huffman, FILE *header){
-  
-    int *size = (int*) malloc(sizeof(int));
-    BYTE aux = 0;
-    (*size) = 0;
-    fprintf(header, "%c", aux);
-    fprintf(header, "%c", aux);
-    write_Tree(huffman, size, header);
-
-    return (*size);
-}
-
 void compress(){
 
     char nome_entrada[200],nome_saida[200],aux[150];
