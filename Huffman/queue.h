@@ -10,12 +10,12 @@ struct priority_q{
 };
 
 /*
- * Cria uma lista de prioridades vazia.
+ * Criae retorna uma lista de prioridades vazia.
  */
 priority_queue* creat_priority_queue();
 
 /*
- * Recebe a letra a frequencia e renfileira em prioridade minima.
+ * Recebe a letra, a frequencia e renfileira em prioridade minima.
  */
 void enqueue(Tree *node, priority_queue *pq);
 
