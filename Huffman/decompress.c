@@ -61,7 +61,7 @@ void decompress(){
     FILE *arquivo_entrada;
     FILE *arquivo_saida;
 
-    BYTE character, *arvore;
+    BYTE character;
     int lixo, size_tree = 0, i;
     Tree *bt = NULL;
 
@@ -99,13 +99,11 @@ void decompress(){
     fscanf(arquivo_entrada, "%c", &character);
     size_tree = size_tree | character;
 
-
-    arvore = (BYTE*) malloc((sizeof(unsigned char)*size_tree));
-
     system("cls");
     printf("Aguarde ...\n");
 
-    bt = rebuild_huffman_tree(arquivo_entrada);
+    if(size_tree == 2) bt = (Tree*)func_exception(arquivo_entrada);
+    else bt = rebuild_huffman_tree(arquivo_entrada);
     arquivo_saida = fopen(nome_saida, "wb");
 
     write_decompress(bt, arquivo_entrada, arquivo_saida, lixo);

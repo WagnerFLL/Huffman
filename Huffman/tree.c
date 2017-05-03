@@ -1,13 +1,5 @@
 #include "tree.h"
 
-Tree* creating_nodes (BYTE character){
-	Tree *h_tree = (Tree *)malloc(sizeof(Tree));
-	h_tree->character = character;
-	h_tree->left = NULL;
-	h_tree->right = NULL;
-	return h_tree;
-}
-
 Tree* creat_node(BYTE character, int frequencia){
 
     Tree *new_node = (Tree*) malloc(sizeof(Tree));

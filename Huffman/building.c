@@ -1,6 +1,19 @@
 #include "building.h"
 
+
+Tree *func_exception(FILE *arquivo){
+    BYTE character;
+    fscanf(arquivo, "%c", &character);
+
+    Tree *h_tree = creat_node(character,0);
+    fscanf(arquivo, "%c", &character);
+    if(character == '\\') fscanf(arquivo, "%c", &character);
+    h_tree->left = creat_node(character, 0);
+    return (Tree*) h_tree;
+
+}
 Tree* rebuild_huffman_tree (FILE *arquivo){
+
     int condition = 1;
     BYTE character;
 
@@ -15,7 +28,7 @@ Tree* rebuild_huffman_tree (FILE *arquivo){
         fscanf(arquivo, "%c", &character);
         condition = 0;
     }
-    Tree *h_tree = creating_nodes(character);
+    Tree *h_tree = creat_node(character,0);
     if(condition)
     {
         h_tree->left = rebuild_huffman_tree(arquivo);

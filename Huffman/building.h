@@ -1,6 +1,8 @@
 #include "tree.h"
 #include "queue.h"
 
+Tree *func_exception(FILE *arquivo);
+
 /*
  * Constrói a árvore de huffman a partir do cabeçalho do arquivo.
  */

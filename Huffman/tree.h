@@ -18,11 +18,6 @@ struct _tree{
     Tree *right;
 };
 
-/*
- * Recebe um caractere e retorna um no só com essa informação.
- */
-Tree* creating_nodes (BYTE character);
-
 
 /*
  * Recebe um Char e a sua frequencia e retorna um no com esse char.
