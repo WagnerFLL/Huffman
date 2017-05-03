@@ -26,4 +26,9 @@ void creat_table(BYTE tabela[][150], Tree* bt, BYTE *string, int position);
  */
 void compress();
 
+/*
+ * Recebe a tabela, os arquivos e o tamanho da arvore. Escreve os bytes comprimdos no arquivo final.
+ */
+void write_compress(BYTE tabela[][150], FILE* arquivo, FILE* saida, int tree_size);
+
 #endif // COMPRESS_H
