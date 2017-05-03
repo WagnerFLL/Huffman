@@ -25,7 +25,8 @@ struct _tree{
 Tree* creat_node(BYTE character, int frequencia);
 
 /*
- * FALTA COMENTAR!!!!!!!!!!!!!!!!!!!
+ * Recebe a árvore, o seu tamanho e o arquivo onde será escrita a árvore.
+ * Não há nenhum retorna, na função a árvore será escrita no cabeçalho.
  */
 void write_Tree(Tree *root, int *size, FILE *header);
 
