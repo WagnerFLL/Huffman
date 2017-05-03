@@ -1,1 +1,0 @@
-gcc main.c compress.h compress.c decompress.h decompress.c building.h building.c tree.h tree.c queue.h queue.c -o Huffman.exe
